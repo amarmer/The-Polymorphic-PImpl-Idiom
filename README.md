@@ -1,4 +1,4 @@
-# An Alternative to the Classic PImpl Idiom
+# An alternative to the classic PImpl idiom
 
 ## Introduction
 
