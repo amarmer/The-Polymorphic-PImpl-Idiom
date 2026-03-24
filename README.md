@@ -49,11 +49,17 @@ std::unique_ptr<ICounter> ConstructCounter(int initialCount) {
 **main.cpp**
 ```cpp
 #include "Counter.h"
+#include <iostream>
 
 int main() {
     Counter counter(10);
-    counter.Call(&ICounter::Inc);
-    int count = counter.Call(&ICounter::Count); 
+
+    counter->Inc();
+    
+    int count = counter->Count();
+
+    std::cout << "count: " << count << std::endl;
+    
     return 0;
 }
 ```
