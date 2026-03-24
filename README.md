@@ -23,7 +23,9 @@ struct ICounter {
 
 std::unique_ptr<ICounter> ConstructCounter(int initialCount);
 
-class Counter: public PImpl<ConstructCounter> {};
+class Counter: public PImpl<ConstructCounter> {
+    using PImpl::PImpl;
+};
 ```
 
 **CounterImpl.cpp**
@@ -69,7 +71,6 @@ std::unique_ptr<ICounter> ConstructCounter(int initialCount);
 class Counter : public PImpl<
     PImplConstructor<>(ConstructCounter),
     PImplConstructor<int>(ConstructCounter)> {
-public:
     using PImpl::PImpl;
 };
 
@@ -178,4 +179,4 @@ protected:
 
 
 
-*The complete source code is available at https://wandbox.org/permlink/HAbM82zTUH0u18cu*
+*The complete source code is available at https://wandbox.org/permlink/eDH80wmSecjmRIZZ*
