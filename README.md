@@ -71,11 +71,10 @@ The first factory whose signature matches the arguments is called at compile tim
 Use `PImplConstructor` to resolve overloaded factory names:
 
 ```cpp
-std::unique_ptr<ICounter> ConstructCounter();
-std::unique_ptr<ICounter> ConstructCounter(int initialCount);
+std::unique_ptr<ICounter> ConstructCounter1();
+std::unique_ptr<ICounter> ConstructCounter2(int initialCount);
 
-class Counter : public PImpl<PImplConstructor<>(ConstructCounter),
-                             PImplConstructor<int>(ConstructCounter)> {
+class Counter : public PImpl<ConstructCounter1, ConstructCounter2> {
     using PImpl::PImpl;
 };
 
@@ -136,18 +135,7 @@ struct return_type<F> {
 template<auto F>
 using return_type_t = typename return_type<F>::type;
 
-template<typename... Args>
-struct constructor_selector_t {
-    template<typename Ret>
-    constexpr auto operator()(Ret(*f)(Args...)) const {
-        return f;
-    }
-};
-
 } // namespace PImplDetail
-
-template<typename... Args>
-constexpr PImplDetail::constructor_selector_t<Args...> PImplConstructor{};
 
 // Base class for PImpl pattern.
 template <auto... Constructors>
@@ -186,4 +174,4 @@ protected:
 
 
 
-*The complete source code is available at https://wandbox.org/permlink/roInux9m1XzwqodA*
+*The complete source code is available at https://wandbox.org/permlink/6EKqG3EqYtjxzzhP*
