@@ -74,9 +74,7 @@ Use `PImplConstructor` to resolve overloaded factory names:
 std::unique_ptr<ICounter> ConstructCounter();
 std::unique_ptr<ICounter> ConstructCounter(int initialCount);
 
-class Counter : public PImpl<
-    PImplConstructor<>(ConstructCounter),
-    PImplConstructor<int>(ConstructCounter)> {
+class Counter : public PImpl<PImplConstructor<>(ConstructCounter), PImplConstructor<int>(ConstructCounter)> {
     using PImpl::PImpl;
 };
 
