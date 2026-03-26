@@ -25,7 +25,7 @@ struct ICalculator {
 
 class Calculator: public PImplHandle<ICalculator> {
 public:
-    explicit Calculator(int factor);
+    explicit Calculator(int sum);
 };
 ```
 
