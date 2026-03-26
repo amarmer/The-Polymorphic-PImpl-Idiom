@@ -1,4 +1,4 @@
-# An alternative to the classic PImpl idiom
+# The Polymorphic PImpl Idiom
 
 ## Introduction
 
