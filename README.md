@@ -27,7 +27,7 @@ public:
 };
 ```
 
-**CounterImpl.cpp**
+**CalculatorImpl.cpp**
 ```cpp
 #include "Calculator.h"
 
