@@ -31,7 +31,7 @@ public:
 ```cpp
 #include "Calculator.h"
 
-class CalculatorImpl : public ICalculator {
+class CalculatorImpl: public ICalculator {
     int sum_;
 public:
     CalculatorImpl(int sum) : sum_(sum) {}
@@ -40,8 +40,8 @@ public:
     int Sum() const override { return sum_; }
 };
 
-Calculator::Calculator(int factor) 
-    : PImplHandle(std::in_place_type<CalculatorImpl>, factor) 
+Calculator::Calculator(int sum) 
+    : PImplHandle(std::in_place_type<CalculatorImpl>, sum) 
 {}
 ```
 
@@ -79,8 +79,8 @@ protected:
     template <typename Implementation, typename... Args>
     PImplHandle(std::in_place_type_t<Implementation>, Args&&... args) {
 
-        // With 'final' and 'shared_ptr' no need virtual destructor in 'Interface'.
-        struct FinalWrapper final : public Implementation {
+        // With 'final' and 'shared_ptr', no need for a virtual destructor in 'Interface'.
+        struct FinalWrapper final: public Implementation {
             using Implementation::Implementation;
         };
 
@@ -93,4 +93,4 @@ private:
 };
 ```
 
-*The complete source code is available at https://wandbox.org/permlink/IAaOtwjxjo9yWErk*
+*The complete source code is available at https://wandbox.org/permlink/tbZxnTDCFKsifhQv*
