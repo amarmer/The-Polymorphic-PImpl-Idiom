@@ -34,7 +34,7 @@ public:
 class CalculatorImpl: public ICalculator {
     int sum_;
 public:
-    CalculatorImpl(int sum) : sum_(sum) {}
+    CalculatorImpl(int sum): sum_(sum) {}
 
     void Add(int n) override { sum_ += n; }
     int Sum() const override { return sum_; }
