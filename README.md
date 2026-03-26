@@ -7,7 +7,7 @@ the tedious task of manually forwarding every public method to the hidden implem
 The Polymorphic PImpl eliminates this boilerplate; it provides a zero-maintenance compilation firewall.</br>
 This pattern simplifies maintenance and enables native mocking for unit tests.
 
-## Applying the Pattern
+## Applying the Idiom
 
 **Calculator.h**
 ```cpp
