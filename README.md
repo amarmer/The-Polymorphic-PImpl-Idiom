@@ -17,7 +17,8 @@ This pattern simplifies maintenance and enables native mocking for unit tests.
 
 // The Public Interface
 struct ICalculator {
-    // No virtual destructor needed.
+    // Required by PImpl: checked at compile time.
+    virtual ~ICalculator() = default;
     
     virtual void Add(int n) = 0;
     virtual int Sum() const = 0;
@@ -68,31 +69,26 @@ int main() {
 **PImpl.h**
 ```cpp
 #pragma once
-
 #include <memory>
 #include <utility>
+#include <type_traits>
 
 template <typename Interface>
 class PImpl {
+    static_assert(std::has_virtual_destructor_v<Interface>, "Interface must have a virtual destructor");
+
 public:
     Interface* operator->() const { return ptr_.get(); }
 
 protected:
     template <typename Implementation, typename... Args>
     PImpl(std::in_place_type_t<Implementation>, Args&&... args) {
-
-        // With 'final' and 'shared_ptr', no need for a virtual destructor in 'Interface'.
-        struct FinalWrapper final: public Implementation {
-            using Implementation::Implementation;
-        };
-
-        // shared_ptr handles the non-virtual destructor safety
-        ptr_ = std::make_shared<FinalWrapper>(std::forward<Args>(args)...);
+        ptr_ = std::make_unique<Implementation>(std::forward<Args>(args)...);
     }
 
 private:
-    std::shared_ptr<Interface> ptr_;
+    std::unique_ptr<Interface> ptr_;
 };
 ```
 
-*The complete source code is available at https://wandbox.org/permlink/AylI9MNDWtFxNtL1*
+*The complete source code is available at https://wandbox.org/permlink/4mkDPXssSC0etzSW*
