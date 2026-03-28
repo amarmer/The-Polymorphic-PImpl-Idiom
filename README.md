@@ -142,6 +142,7 @@ protected:
     return *this;
   }
     
+private:    
   void CopyFrom(const PImpl& other) {
     pClone_ = other.pClone_;
     pInterface_ = other.pClone_->Clone(other.pInterface_.get());
@@ -158,4 +159,4 @@ public:
 };
 ```
 
-*The complete source code is available at https://wandbox.org/permlink/p627TDfHhMXFdnZn*
+*The complete source code is available at https://wandbox.org/permlink/9HmmfcvKuC4122WI*
