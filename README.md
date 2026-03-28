@@ -120,34 +120,42 @@ protected:
   }
 
   // Copy/Move Operations
-  PImpl(const PImpl& other)
-    : pClone_(other.pClone_), pInterface_(other.pClone_->Clone(other.pInterface_.get())) {}
+  PImpl(const PImpl& other) {
+    CopyFrom(other);
+  }
 
   PImpl& operator=(const PImpl& other) {
     if (this != &other) {
-      pClone_ = other.pClone_;
-      pInterface_ = other.pClone_->Clone(other.pInterface_.get());
+        CopyFrom(other);
     }
     return *this;
   }
+    
+  PImpl(PImpl&& other) noexcept {
+    MoveFrom(other);
+  }
 
-  PImpl(PImpl&& other) noexcept
-    : pClone_(other.pClone_), pInterface_(std::move(other.pInterface_)) {
+  PImpl& operator=(PImpl&& other) noexcept {
+    if (this != &other) {
+        MoveFrom(other);
+    }
+    return *this;
+  }
+    
+  void CopyFrom(const PImpl& other) {
+    pClone_ = other.pClone_;
+    pInterface_ = other.pClone_->Clone(other.pInterface_.get());
+  }
+
+  void MoveFrom(PImpl& other) noexcept {
+    pClone_ = other.pClone_;
+    pInterface_ = std::move(other.pInterface_);
     other.pClone_ = nullptr;
   }
-
-  PImpl& operator = (PImpl&& other) noexcept {
-    if (this != &other) {
-      pClone_ = other.pClone_;
-      pInterface_ = std::move(other.pInterface_);
-      other.pClone_ = nullptr;
-    }
-    return *this;
-  }
-
+    
 public:
   Interface* operator->() const { return pInterface_.get(); }
 };
 ```
 
-*The complete source code is available at https://wandbox.org/permlink/G7JWBVTNAkekY3VM*
+*The complete source code is available at https://wandbox.org/permlink/p627TDfHhMXFdnZn*
