@@ -10,7 +10,7 @@ The Polymorphic PImpl eliminates this boilerplate and provides four key advantag
 1. **No Proxy Tax** — no manual forwarding wrappers needed; adding methods requires no changes to the public class
 2. **Native mocking** — create `MockCalculator: public ICalculator` for unit tests without touching `PImpl`
 3. **Multiple implementations** — swap `CalculatorImpl` for a different implementation without changing the header
-4. **Value semantics** — copy constructor and copy assignment are provided automatically with deep copy semantics
+4. **Value semantics** —  copy and move operations are automatically provided; copying performs a deep copy
 
 ## Applying the Idiom
 
