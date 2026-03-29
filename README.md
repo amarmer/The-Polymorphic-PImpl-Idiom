@@ -3,9 +3,14 @@
 ## Why the Polymorphic PImpl Idiom?
 
 The PImpl (Pointer to Implementation) idiom creates compilation firewalls, but the Classic PImpl often comes with a "Proxy Tax" - 
-the tedious task of manually forwarding every public method to the hidden implementation.</br>
-The Polymorphic PImpl eliminates this boilerplate; it provides a zero-maintenance compilation firewall.</br>
-This pattern simplifies maintenance and enables native mocking for unit tests.
+the tedious task of manually forwarding every public method to the hidden implementation.
+
+The Polymorphic PImpl eliminates this boilerplate and provides four key advantages over the Classic PImpl:
+
+1. **No Proxy Tax** — no manual forwarding wrappers needed; adding methods requires no changes to the public class
+2. **Native mocking** — create `MockCalculator: public ICalculator` for unit tests without touching `PImpl`
+3. **Multiple implementations** — swap `CalculatorImpl` for a different implementation without changing the header
+4. **Value semantics** — copy constructor and copy assignment are provided automatically with deep copy semantics
 
 ## Applying the Idiom
 
