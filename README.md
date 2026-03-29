@@ -22,9 +22,7 @@ The Polymorphic PImpl eliminates this boilerplate and provides four key advantag
 
 // The Public Interface
 struct ICalculator {
-    // Required by PImpl: checked at compile time.
-    virtual ~ICalculator() = default;
-    
+    virtual ~ICalculator() = default; // Enforced in PImpl.
     virtual void Add(int n) = 0;
     virtual int Sum() const = 0;
 };
