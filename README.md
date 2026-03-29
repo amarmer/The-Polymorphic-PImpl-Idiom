@@ -115,8 +115,8 @@ protected:
   template <typename Implementation, typename... Args>
   PImpl(std::in_place_type_t<Implementation>, Args&&... args)
     : pInterface_(std::make_unique<Implementation>(std::forward<Args>(args)...)) {
-    static const CloneT<Implementation> globalCloner;
-    pClone_ = &globalCloner;
+    static const CloneT<Implementation> s_cloner;
+    pClone_ = &s_cloner;
   }
 
   // Copy/Move Operations
@@ -159,4 +159,4 @@ public:
 };
 ```
 
-*The complete source code is available at https://wandbox.org/permlink/9HmmfcvKuC4122WI*
+*The complete source code is available at https://wandbox.org/permlink/5TgaJYghuj5kPwyQ*
