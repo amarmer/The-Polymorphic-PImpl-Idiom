@@ -91,36 +91,17 @@ template <typename Interface>
 class PImpl {
   static_assert(std::has_virtual_destructor_v<Interface>, "Interface needs a virtual destructor");
 
-   /*
-   * IClone and CloneT provide "Virtual Copying":
-   * 1. Deep Copy: unique_ptr<Interface> can't copy itself because it's abstract.
-   * 2. Type Erasure: CloneT "remembers" the concrete type (e.g., CalculatorImpl)
-   *    so the base class can duplicate it without the header knowing its definition.
-   */
-  struct IClone {
-    virtual std::unique_ptr<Interface> Clone(const Interface* p) const = 0;
-  };
-
-  template <typename T>
-  struct CloneT: public IClone {
-    std::unique_ptr<Interface> Clone(const Interface* p) const override {
-      return std::make_unique<T>(*static_cast<const T*>(p));
-    }
-  };
-
-  const IClone* pClone_ = nullptr;
-  std::unique_ptr<Interface> pInterface_;
-
+public:
+  Interface* operator->() const { return pInterface_.get(); }
+    
 protected:
   ~PImpl() = default;
 
   // Constructor
   template <typename Implementation, typename... Args>
   PImpl(std::in_place_type_t<Implementation>, Args&&... args)
-    : pInterface_(std::make_unique<Implementation>(std::forward<Args>(args)...)) {
-    static const CloneT<Implementation> s_cloner;
-    pClone_ = &s_cloner;
-  }
+    : pInterface_(std::make_unique<Implementation>(std::forward<Args>(args)...)), 
+      pClone_(&CloneImpl<Implementation>) {}
 
   // Copy/Move Operations
   PImpl(const PImpl& other) {
@@ -145,10 +126,15 @@ protected:
     return *this;
   }
     
-private:    
+private:
+  template <typename T>
+  static std::unique_ptr<Interface> CloneImpl(const Interface* p) {
+    return std::make_unique<T>(*static_cast<const T*>(p));
+  }    
+    
   void CopyFrom(const PImpl& other) {
     pClone_ = other.pClone_;
-    pInterface_ = other.pClone_->Clone(other.pInterface_.get());
+    pInterface_ = other.pClone_(other.pInterface_.get());
   }
 
   void MoveFrom(PImpl& other) noexcept {
@@ -156,10 +142,10 @@ private:
     pInterface_ = std::move(other.pInterface_);
     other.pClone_ = nullptr;
   }
-    
-public:
-  Interface* operator->() const { return pInterface_.get(); }
+
+  std::unique_ptr<Interface> pInterface_;
+  std::unique_ptr<Interface>(*pClone_)(const Interface*);
 };
 ```
 
-*The complete source code is available at https://wandbox.org/permlink/5TgaJYghuj5kPwyQ*
+*The complete source code is available at https://wandbox.org/permlink/RgWQZZbfO9zwydac*
